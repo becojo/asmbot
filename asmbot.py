@@ -61,12 +61,12 @@ def disasm():
     parts = text.split(' ')
     archmode = parts[0]
     code = ' '.join(parts[1:])
-    
+
     if archmode in disasm_archmodes:
         cs = Cs(*disasm_archmodes[archmode])
 
         out = "\n".join([_format_opcode(op) for op in cs.disasm(code.decode('hex'), 0x0)])
-        
+
         return JSONResponse(json.dumps({'response_type': 'in_channel', 'text': '```' + out + '```'}))
     else:
         return '/usage [archmode] [hex code]\nInvalid archmode. Available archmodes are: ' + ', '.join(disasm_archmodes.keys())
@@ -82,12 +82,13 @@ def asm():
     parts = text.split(' ')
     archmode = parts[0]
     code = ' '.join(parts[1:])
-    
+
     if archmode in asm_archmodes:
         ks = Ks(*asm_archmodes[archmode])
         code, count = ks.asm(code)
         data = str(bytearray(code)).encode('hex')
-        
+
         return JSONResponse(json.dumps({'response_type': 'in_channel', 'text': data}))
     else:
         return 'Usage: /asm [archmode] [code]\nInvalid archmode. Available archmodes are: ' + ', '.join(asm_archmodes.keys())
+
